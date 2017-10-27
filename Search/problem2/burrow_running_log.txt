@@ -1,0 +1,48 @@
+# burrow running log
+
+[bxiong@silo ~]$ python Solver15.py test2.txt 
+Initial Board:
+[14, 15, 13, 12]
+[11, 10, 9, 8]
+[7, 6, 5, 4]
+[3, 2, 1, 0]
+
+-------- two h(x) combined:(hHummingDistance,hMisplaced,state) --------
+# of states tried:  6904511
+Total time used: 
+0:23:28.807432
+['U', 'U', 'R', 'U', 'R', 'R', 'D', 'R', 'R', 'U', 'R', 'D', 'L', 'U', 'L', 'L', 'D', 'R', 'D', 'R', 'D', 'D', 'L', 'U', 'L', 'U', 'R', 'R', 'R', 'D', 'R', 'U', 'R', 'D', 'R', 'U', 'L', 'D']
+Initial Board:
+[14, 15, 13, 12]
+[11, 10, 9, 8]
+[7, 6, 5, 4]
+[3, 2, 1, 0]
+
+-------- hMisplaced --------
+
+[bxiong@silo ~]$ python Solver15_2.py test2.txt
+Initial Board:
+[14, 15, 13, 12]
+[11, 10, 9, 8]
+[7, 6, 5, 4]
+[3, 2, 1, 0]
+
+-------- hHummingDistance --------
+# of states tried:  6020379
+Total time used: 
+0:24:04.594512
+['U', 'U', 'R', 'U', 'R', 'R', 'D', 'R', 'R', 'U', 'R', 'D', 'L', 'U', 'L', 'L', 'D', 'R', 'D', 'R', 'D', 'D', 'L', 'U', 'L', 'U', 'R', 'R', 'R', 'D', 'R', 'U', 'R', 'D', 'R', 'U', 'L', 'D']
+[bxiong@silo ~]$ 
+
+Initial Board:
+[14, 15, 13, 12]
+[11, 10, 9, 8]
+[7, 6, 5, 4]
+[3, 2, 1, 0]
+
+-------- hHummingDistance , hReverse --------
+# of states tried:  1708310
+Total time used: 
+0:05:29.678559
+['R', 'U', 'L', 'D', 'L', 'U', 'R', 'D', 'R', 'U', 'R', 'D', 'R', 'R', 'D', 'R', 'D', 'R', 'U', 'L', 'U', 'U', 'L', 'U', 'L', 'U', 'R', 'R', 'D', 'L', 'L', 'U', 'L', 'L', 'D', 'L', 'D', 'D']
+xiongbeixiandeMacBook-Pro:bxiong-andnpatt-knayem-a1 bxnxiong$ 

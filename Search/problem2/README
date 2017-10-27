@@ -1,0 +1,16 @@
+For this problem I tried three heuristic functions:
+a. the manhattan distance
+b. the misplaced tiles of the board 
+c. total count of tiles behind current tile that have smaller value than current tile(also used to decide if the board's solvable or not)
+d. average cost of function b and c
+
+For function b(misplaced tile count), when the board has very few misplaced tiles, it performs better than function a(manhattan distance). But for more misplaced tiles on the board, manhattan distance tries much less than the misplaced function. 
+For function c, it gives acceptable solutions at very fast speed, even in the totally reversed case(test2.txt) where almost all the numbers are in decreasing order, it gives a solution within 1 minute. But it does not give optimal moves.
+For function d, it performs slower than function c, but still very fast compared to function a and b. But still it does not give optimal moves to solve the problem. 
+
+Performance:
+For test2.txt, the optimal move using function a, which takes about 30 mins to run, has 38 moves and tried 6020379 states. Using function c we have a solution of 54 moves and tried 8208 states, using function d we have a solution of 52 moves and tried 277649 states. For function b we didn't get a solution within an hour.
+
+The final solution to this problem thus becomes: trying to combine function a and c, so in Solver15.py the implementation of this is, gives the priority queue two kinds of priorities: first it compares states with their cost of function a, and if they tie, compare further their cost of function c. Using this method, we can generate the optimal moves and at a speed between function a and function c. For test2.txt case, we used only 5 mins,visited 1706987 states to get the optimal 38 movements.
+
+More detailed solutions and running time can be found in burrow_running_log.txt file

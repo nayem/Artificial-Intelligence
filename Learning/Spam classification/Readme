@@ -1,0 +1,99 @@
+# Assignment 4 Part 1
+# Spam Classifier
+# bxiong-knayem-takter-a4
+#
+# --------------Naive Bayes Training ----------
+# Model file binary: <MODEL_FILE>_bayes_binary.txt
+# Model file continuous: <MODEL_FILE>_bayes_continuous.txt
+# Execution time: 9.65166401863s
+#
+#  --------------Naive Bayes Testing ----------
+# Confusion matrix::
+# SPAM->positive, NOT_SPAM->negative
+# Binary : {'TP': 44.67502, 'TN': 1.722788, 'FP': 0.27408, 'FN': 53.328113}
+# Binary Accuracy: 98.003133%
+# Continuous: {'TP': 44.67502, 'TN': 1.722788, 'FP': 0.27408, 'FN': 53.328113}
+# Continuous Accuracy: 98.003133%
+# Execution time: 9.64557504654s
+#
+# --------------Decision Tree Training ----------
+# Model file binary: <MODEL_FILE>_dt_model_file_binary.txt
+# Model file continuous: <MODEL_FILE>_dt_model_file_cont.txt
+# Execution time: 971.850014925s
+#
+#  --------------Decision Tree Testing ----------
+# Confusion matrix::
+# SPAM->positive, NOT_SPAM->negative
+# Binary : {'FP': 0.39154267815191857, 'TN': 52.975724353954575, 'FN': 0.6264682850430697, 'TP': 46.00626468285043}
+# Binary Accuracy: 98.9819890368%
+# Continuous: {'FP': 0.15661707126076743, 'TN': 52.50587314017228, 'FN': 1.096319498825372, 'TP': 46.24119028974158}
+# Continuous Accuracy: 98.7470634299%
+# Execution time: 5.17199993134
+#
+# ---------- Train Data Set (Naive Bayes+Decision Tree) -------------
+# In this assignment we classified spam and non spam emails using Naive bayes and Decision Tree Methods.
+# Train Data: In this section we read all the files from SPAM and NON SPAM folder inside Train Folder.
+# We parsed each word from each document and calculate their frequency in that documents and stored them in a dictionary for each document
+# To improve the performance of our train function we used regular expression and ignored the words which will not add any value in the implementation.
+# Like we ignored single character words(e.g. I, a), whole email address(e.g. name@gmail.com), word with more than one consecutive hyphen (e.g. go--home), ending dot(.) and other symbols(e.g. <,>,")
+# And consider word with hyphens in words(e.g. a-good-one), apostrophe (e.g. adam's).  
+#
+# ============ Train Naive Bayes =============
+# Initially, we calculate the frequecy of the words in each training files.
+# Then we calculate the tf-idf value in two ways, one for binary and another for continuous.
+# We consider tf-idf value, since this will give less value for frequent words like- 'the', 'is', 'of', 'at'.
+#    Binary: tf(d,w)=1 if word w is in the document d, otherwise 0
+#    Continuous: tf(d,w)=0.5+0.5*(frequecy of word w in document d)/(maximum frequecy of a word in d)
+#    idf(D,w)=log(Total Number of documents in D)/(Number of document in which w is present)
+# tf-idf value is a value of a document that shows how a word represent a document.
+# We consider this as an weight for each word of the training document.
+# Then we normalize this to generate probability P(T|w_i).
+# In the model file, we write the number of training SPAM class files and number of training NOT-SPAM class files; and the all word's probability for each class.
+# This probability will be used for testing.
+# Also write the top 10 most assosiated word for SPAM and top 10 most assosiated word for NON-SPAM in <DISTINCTIVE_WORDS_FILE>
+#
+# ============ Decision Tree =============
+# In decision Tree method, we created a decision Tree using List. If index 'i' is root we considered index '2*i + 1' as left child of that root and
+# index '2*i + 2' as right child.
+# ----- Train Decision Tree ---------
+# Intially we used the dictionary from the train data set to train this decision Tree. We stored all the unique words into another dictionary.
+# We calculated gain for each word from the dictionary in order to find the best attribute. We considered the best_attribute as root
+# In order to calculate gain we created a list based on whether a word is present in the document or not. and based on the length of these
+# two lists we calculated gain for that word. And find the best_attribute whose gain is the maximum.
+# We implemented entropy to calculate gain. After finding the best attribute we updated the train list based on some conditions.
+# For Binary feature we updated the list based on whether that best_attribute is in the documents or not.
+# We created two branches one is Zero_branch where we stored the documents where the best_attribute is not present,
+# and another is a NON_zero_branch where we stored the documents where the best_attribute is present.
+# We used ID3 algorithm to implement decision tree.
+# after calculating the two updated list we recursively call the ID3 algorithm to create the new branches under the root.
+# We implemented the whole decision tree and stored that in a file named 'dt_model_file_binary' and "dt_model_file_cont" respectively for
+# Binary and Continuous feature. In this tree the leaf nodes are either "SPAM" or "NON_SPAM"
+# We used this model files to test our test files.
+# In binary features we created the branches based on whether a word is in the document or not and in continuous features
+# we calculated a threshold to decide on the branches of the tree in continuous feature.
+# we calculated maximum frequency of a word occured in any of the documents and took a fraction of that number and considered that
+# as a threshold. We created two branches if the frequency of a word on any given document is less than the threshold or bigger than the threshold
+# we used this condition when creating updated lists while implementing the tree recursively
+#
+# -------- Test Naive Bayes --------
+# First, we read the model file in a dictionary and calculate the prior probability for P(S=SPAM) and P(NON-SPAM) using the number of SPAM and NON-SPAM training file.
+# Then for each testing document, tokenize all word of the test document(W) and calculate P(S|W).
+#    P(S|W)=P(S,W)P(S)
+#    P(S=SPAM|W)=P(S=SPAM,w_1)P(S=SPAM,w_2)... P(S=SPAM,w_n)P(S=SPAM)
+#    P(S=NON-SPAM|W)=P(S=NON-SPAM,w_1)P(S=NON-SPAM,w_2)... P(S=NON-SPAM,w_n)P(S=NON-SPAM)
+# Then level the test data whose probability is higher.
+# And store that in the confusion matrix.
+# And found the accuracy 98.003133%(for Binary), 98.003133%(for Continuous).
+#
+# -------- Test Decision Tree --------
+# For testing we first created a list consisting all the words of each documents
+# then read the tree from the model file and stored that into a list
+# we started checking the tree from the root and based on whether that word(root)  is in the documents or not we split on
+# a branch and look for a leaf. And when we find a leaf we return the value whether the document is SPAM or NOT.
+# We created confusion matrix for each feature. And found the accuracy 98.7470634299%(for Binary), 98.7470634299%(for Continuous).
+# We printed the decision tree for two features up to 4 layers
+#
+# -------- Best Technique --------
+# According to the accuracy, Decision Tree is the best. 
+# But Decision Tree takes much longer time to train than Naive Bayes.
+#

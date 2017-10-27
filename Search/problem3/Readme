@@ -1,0 +1,41 @@
+# Assignment1: Searching (Group: bxiong-andnpatt-knayem-a1)
+# Problem 03:
+#
+# Brife Description: 
+# A file of friend-list is given. I want to place the friends in such a way that in a table the seated people are not mutually friend.
+# So first, I make the friendship graph(Adjacency Matrix, 1->friend, 0->not friend) from the file, then later use this same graph to place the Mutually_Not_Friend people in a table.
+# By the definition of the problem, all the people of a table are mutually not friend, which means there will be a non-friend edge(0) between each pair of people in the table like- a complete graph(clique).
+# Now, the optimal solution of table assignation means requireing less table where seat_per_table is given. 
+# So if I can place maxium number of people in each table, then I will need least number of table. 
+# So that, I start by looking for Mutually_Not_Friend complete graph of size seat_per_table. If I get any clique like that, assign a table for them. 
+# Then again look for table to place other friends. 
+# If not clique of size seat_per_table is avaiable, then decrease the size of seat_per_table and look for smaller clique until all friends are assigend to some table.
+#
+# State Space: 
+# All the combinations of friends who are not mutually friend to each other and each combinations is size SEATS_PER_TABLE to 1.
+# Successor Function, s(x): 
+# All the friends who are not mutually friend of x and yet not assigend to any table.
+# Edge Weight: 
+# Uniform, in the reverse friendship graph if not-friend there is an edge(0), otherwise no edge(1).
+# Heuristic Function: 
+# Consider seat_per_table size clique first, then consider smaller size clique. 
+# Because, placing all the people in seat_per_table will require least number of table. And this understimates than the actual number of table needed.
+# Assumption: 
+# When several same size cliques are found, then the priority is given to the clique which sum of degee of all node is minimum.
+# Because if the people who has less not friend has less edge(more constrainted). So placing them first in a table is better.
+# Problem: 
+# Finding clique in a graph is a NP-hard problem. So I start from seat_per_table size clique and decrease the size until no friend is left to assign in a table.
+#
+# Search Algorithm:
+# Repeat until all friends are assigend and clique_size->[seat_per_table ... 1]
+#	for x in all friends which are not assigend:
+#		s -> s + generate_successor(x)
+#	clique -> List_of_all_cliques in (s)
+# 	Calculate priority for each clique
+#	fringe -> min_Priority_Queue()
+#	fringe.push(key, clique)
+#	Repeat Until fringe is empty:
+#		c->fringe.pop()
+#		assign a table to all the friends of c
+#		Remove the assigend friends from friend list
+#		Remove all the clique with the assigend friends from fringe

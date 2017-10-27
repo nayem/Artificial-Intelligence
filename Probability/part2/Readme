@@ -1,0 +1,54 @@
+### Assignment 3: Problem 2
+### Red line -> simple model
+### Blue line -> HMM model
+### Green line -> A point given in HMM model
+ 
+### Use 3000 Gibbes sampling, Time apporx. 10 min to run
+ 
+ =========================================================================================================================
+ (1) a description of how you formulated the problem, including precisely defining the abstractions (e.g. HMM formulation)
+ =========================================================================================================================
+ Problem 1: This problem is modeled on 1b simplified model. In this problem, edge_strength matrix's each row values of a column is consided as evidence(w)
+  and each column refers to a hidden state(S). Here, no S is depended on any other hidden states S. S refers to the row number of the mountain
+  ridgeline in each column. Higher the gradient value, the greater chance for that row to be on the ridgeline.
+  
+ Problem 2 & 3: This problem is modeled on 1a HMM model. The differnce between the previous model is that here  S is depended on previous hidden states S. 
+ So in the time of evaluating ridgeline, a ridge-point of a column also influences the selection of other ridge-point.
+ 
+ ==================================================
+ (2) a brief description of how your program works
+ ==================================================
+ For the Problem 1, simply I calculate the max gradient value of each column in edge_strength matrix. This means I assign Hidden state(S) that
+ value for which evidence gradient value is higher.
+ 
+ For the Problem 2, first I normalize each column of the edge_strength matrix and this is now the Emission Probabilty matrix.
+ This matrix has the property that higher gradient intutively has higher probabilty. 
+ 
+ Now, for MCMC gibbs sampling, I make the initial sampling with the row numbers which has the maximum gradient value in each column.
+ Then for each column(unwatched variables), I calculated the probabilty P(Si|s_1...s_i-1,s_i+1...s_n, w_1...w_n). For this, I calcuate all the 
+ possible values S_i can take(index of each row). Then from the probabilty distribution of S_i, I choose a new s_i for the new sample. After
+ calculating for each unwatched variables, I get the new samples and add this in the total sample list.
+ 
+ In calculating P(Si|s_1...s_i-1,s_i+1...s_n, w_1...w_n), I use Gausian Distribution for assinging Transitional probabily.
+ This means that P(s_i+1|s_i) is higher if s_i+1=s_i and similarly P(s_i|s_i-1) is higher if s_i=s_i-1. Here s_i+1 refers to the row value of
+ next column ridgeline. And s_i-1 refers to the row value of previous column ridgeline.
+ 
+ After sampling of 3000 times, I calcuate P(Si) for each column and the row value gives higher probabilty, I choose that one as a ridge-point.
+ To calculate this, I evaluate P(Si) I have to select which row index has the higher frequency of occurance in all the samples.
+ 
+ Problem 3 is mostly like the problem 2,just now I have a point (x,y) on the ridgeline. To maintain uniformity, I use the same function of
+ problem 2 just with parameter (gt_row, gt_col) with default value -1. Negative value means no (x,y) point is given, otherwise a point is given. 
+ Now each sample the (x,y) point will be present. To do this this point will be used in calculating P(Si|s_1...s_i-1,s_i+1...s_n, w_1...w_n).
+ In choosing a row value y column, x will always picked. And in the time of choosing a row value y-1 and y+1 column, Transitional Probabilty
+ P(s_i|s_i-1=x) and P(s_i+1=x|s_i) has the near 1 probability. So the chance of choosing (x,y) point in ridgeline is almost 1. To elevate this
+  Transitional Probabilty, I use Gausian Distribution with narrower standard deviation. Besides this, rest this same as Problem 2.
+  
+ =======================================================================================
+ (3) a discussion of any problems, assumptions, simplifications, and/or design decisions
+ =======================================================================================
+ Problem 1 part is faster and gives good result when mountain is darker and sky is ligher. For ligher mountain or white mountain or if other much 
+ darker object is present in the picture, then the ridgeline is not very good.
+   
+ Problem 2 and 3 are very slow for sampling reason and takes around 10minutes to sample. 
+ Higher the sampling rate and better the gaussian distribution model, the better the reason.
+ This gives considerable good result than Problem 1, but lighter mountain peak is also a problem here.
